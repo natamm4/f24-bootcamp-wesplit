@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainPage: View {
     @State private var amount: Double = 0
-    @State private var peopleNum: Int = 0
+    @State private var peopleNum: Int = 1
     @State private var tip: String = "10%"
     
     let tips = ["10%", "15%", "20%", "25%", "0%"]
@@ -30,6 +30,7 @@ struct MainPage: View {
     }
     
     var amountPerPerson: Double {
+        let peopleNum = max(1, peopleNum)
         return totalWithTip / Double(peopleNum)
     }
     
@@ -37,8 +38,8 @@ struct MainPage: View {
         NavigationStack() {
             Form() {
                 Section() {
-                    TextField("Amount", value: $amount, format: .number)
-                    TextField("Number of People", value: $peopleNum, format: .number)
+                    TextField("Amount", value: $amount, format: .number).keyboardType(.decimalPad)
+                    TextField("Number of People", value: $peopleNum, format: .number).keyboardType(.numberPad)
                 }
                 Section("How much tip do you want to leave?") {
                     Picker("Tip", selection: $tip) {
