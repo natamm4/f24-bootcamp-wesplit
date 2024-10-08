@@ -11,6 +11,12 @@ struct MainPage: View {
     @State private var amount: Double = 0
     @State private var peopleNum: Int = 1
     @State private var tip: String = "10%"
+    @FocusState private var isFocused: Bool
+    @Environment(\.colorScheme) var colorScheme
+    
+    var buttonColor: Color {
+        return colorScheme == .dark ? .white : .black
+    }
     
     let tips = ["10%", "15%", "20%", "25%", "0%"]
     
@@ -38,7 +44,10 @@ struct MainPage: View {
         NavigationStack() {
             Form() {
                 Section() {
-                    TextField("Amount", value: $amount, format: .number).keyboardType(.decimalPad)
+                    TextField("Amount", value: $amount, format: .number).keyboardType(.decimalPad).focused($isFocused)
+                        .onTapGesture {
+                            isFocused = true
+                        }
                     TextField("Number of People", value: $peopleNum, format: .number).keyboardType(.numberPad)
                 }
                 Section("How much tip do you want to leave?") {
@@ -55,6 +64,11 @@ struct MainPage: View {
                 Section("Amount per person:") {
                     Text("$\(amountPerPerson, specifier: "%.2f")")
                 }
+            }
+            NavigationLink {
+                SplitView()
+            } label: {
+                Text("Done").foregroundStyle(buttonColor)
             }
             .navigationTitle("WeSplit")
         }
